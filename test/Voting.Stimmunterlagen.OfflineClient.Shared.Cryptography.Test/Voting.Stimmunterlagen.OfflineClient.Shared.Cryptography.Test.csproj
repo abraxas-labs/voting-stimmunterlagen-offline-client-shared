@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.csproj" />
+        <ProjectReference Include="..\..\src\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="TestFiles\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>

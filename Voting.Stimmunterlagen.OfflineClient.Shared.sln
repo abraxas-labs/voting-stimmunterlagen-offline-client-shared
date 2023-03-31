@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8551CF8F-DDD3-4B5C-AE9A-33749211C31D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Stimmunterlagen.OfflineClient.Shared", "src\Voting.Stimmunterlagen.OfflineClient.Shared\Voting.Stimmunterlagen.OfflineClient.Shared.csproj", "{B98DCDA1-CC5D-48CF-909E-3FA1D7A1D140}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{944B61D4-9500-4D50-80AB-1A483D3721C1}"
+	ProjectSection(SolutionItems) = preProject
+		.gitlab-ci.yml = .gitlab-ci.yml
+		config\CodeAnalysis.props = config\CodeAnalysis.props
+		config\Common.props = config\Common.props
+		Directory.Build.props = Directory.Build.props
+		config\project.ruleset = config\project.ruleset
+		README.md = README.md
+		config\stylecop.json = config\stylecop.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography", "src\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.csproj", "{F7ECB5D6-DD8F-40EA-BB6D-F9EA0CA3B511}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks", "src\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks.csproj", "{3525A236-6F99-444D-B851-86E75FC71BE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6C990109-7448-44A6-B575-F68881CC3C2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test", "test\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test.csproj", "{54403C31-9429-46E3-8D48-FC0C50E29A92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B98DCDA1-CC5D-48CF-909E-3FA1D7A1D140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98DCDA1-CC5D-48CF-909E-3FA1D7A1D140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98DCDA1-CC5D-48CF-909E-3FA1D7A1D140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98DCDA1-CC5D-48CF-909E-3FA1D7A1D140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7ECB5D6-DD8F-40EA-BB6D-F9EA0CA3B511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7ECB5D6-DD8F-40EA-BB6D-F9EA0CA3B511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7ECB5D6-DD8F-40EA-BB6D-F9EA0CA3B511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7ECB5D6-DD8F-40EA-BB6D-F9EA0CA3B511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3525A236-6F99-444D-B851-86E75FC71BE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3525A236-6F99-444D-B851-86E75FC71BE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3525A236-6F99-444D-B851-86E75FC71BE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3525A236-6F99-444D-B851-86E75FC71BE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54403C31-9429-46E3-8D48-FC0C50E29A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54403C31-9429-46E3-8D48-FC0C50E29A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54403C31-9429-46E3-8D48-FC0C50E29A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54403C31-9429-46E3-8D48-FC0C50E29A92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B98DCDA1-CC5D-48CF-909E-3FA1D7A1D140} = {8551CF8F-DDD3-4B5C-AE9A-33749211C31D}
+		{F7ECB5D6-DD8F-40EA-BB6D-F9EA0CA3B511} = {8551CF8F-DDD3-4B5C-AE9A-33749211C31D}
+		{3525A236-6F99-444D-B851-86E75FC71BE7} = {8551CF8F-DDD3-4B5C-AE9A-33749211C31D}
+		{54403C31-9429-46E3-8D48-FC0C50E29A92} = {6C990109-7448-44A6-B575-F68881CC3C2E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {847818C5-186B-419E-9239-FDD90ACC90D7}
+	EndGlobalSection
+EndGlobal

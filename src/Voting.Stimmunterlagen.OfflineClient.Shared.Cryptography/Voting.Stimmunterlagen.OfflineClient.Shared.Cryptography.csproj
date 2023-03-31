@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <InternalsVisibleTo Include="Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test" />
+    </ItemGroup>
+</Project>
