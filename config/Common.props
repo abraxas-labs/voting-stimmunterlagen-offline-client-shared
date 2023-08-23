@@ -5,6 +5,7 @@
         <LangVersion>10</LangVersion>
         <Authors>Abraxas Informatik AG</Authors>
         <Nullable>enable</Nullable>
+        <Deterministic>true</Deterministic>
         <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 
         <!-- Overwritten during publish, only for local development -->
@@ -19,5 +20,36 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MsExtensionsVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
     </ItemGroup>
+
+    <Target Name="GenerateFileHashes" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+        <PropertyGroup>
+            <HashOutPath>$(OutDir)\$(ProjectName).sha256</HashOutPath>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <FilesToHash Include="$(OutDir)$(TargetFileName)"/>
+        </ItemGroup>
+
+        <GetFileHash Files="@(FilesToHash)" Algorithm="SHA256">
+            <Output TaskParameter="Items"
+                    ItemName="OutFilesWithHashes"/>
+        </GetFileHash>
+
+        <ItemGroup>
+            <OutFilesWithHashes>
+                <RelativeOutPath>$([System.IO.Path]::GetRelativePath($(OutDir), '%(Identity)'))</RelativeOutPath>
+            </OutFilesWithHashes>
+        </ItemGroup>
+
+        <WriteLinesToFile File="$(HashOutPath)" Lines="@(OutFilesWithHashes->'%(FileHash) %(RelativeOutPath)')" Overwrite="true"/>
+        <Message Importance="High" Text="@(OutFilesWithHashes->'%(RelativeOutPath) SHA256: %(FileHash)')"/>
+
+        <ItemGroup>
+            <Content Include="$(HashOutPath)">
+                <Pack>true</Pack>
+                <PackagePath>lib\$(TargetFramework)</PackagePath>
+            </Content>
+        </ItemGroup>
+    </Target>
 
 </Project>
