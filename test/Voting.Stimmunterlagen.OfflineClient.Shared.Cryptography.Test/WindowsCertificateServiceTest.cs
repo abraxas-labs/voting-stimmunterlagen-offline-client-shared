@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using FluentAssertions;

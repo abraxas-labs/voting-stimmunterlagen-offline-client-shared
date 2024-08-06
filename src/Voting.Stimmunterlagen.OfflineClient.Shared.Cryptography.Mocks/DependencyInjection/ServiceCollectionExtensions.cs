@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks.Storage;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Storage;
 

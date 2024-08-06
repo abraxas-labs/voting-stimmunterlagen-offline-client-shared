@@ -1,10 +1,13 @@
-﻿using System;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Logging;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Algorithms;
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Certificates;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Exceptions;
 
 namespace Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Encryption;
@@ -21,7 +24,7 @@ public class FileEncryptor
         _logger = logger;
     }
 
-    public byte[] Encrypt(byte[] plaintext, X509Certificate2 senderCertificate, List<X509Certificate2> receiverCertificates)
+    public byte[] Encrypt(byte[] plaintext, ICertificate senderCertificate, List<ICertificate> receiverCertificates)
     {
         if (plaintext.Length == 0)
         {
@@ -41,7 +44,7 @@ public class FileEncryptor
         _logger.LogInformation("Encrypting file ({InputFileSize} bytes in size).", plaintext.Length);
 
         var fileKey = GenerateRandomFileKey();
-        var (nonce, tag, ciphertext) = EncryptionAlgorithm.Encrypt(fileKey, plaintext);
+        var (nonce, tag, ciphertext) = new EncryptionAlgorithm().Encrypt(fileKey, plaintext);
         var wrappedKeys = KeyWrapperCryptoAlgorithm.WrapKeys(fileKey, receiverCertificates);
 
         var cryptoFile = CryptoFileBuilder.BuildFile(

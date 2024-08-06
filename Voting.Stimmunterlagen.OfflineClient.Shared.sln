@@ -23,6 +23,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks", "src\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks.csproj", "{3525A236-6F99-444D-B851-86E75FC71BE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6C990109-7448-44A6-B575-F68881CC3C2E}"
+	ProjectSection(SolutionItems) = preProject
+		test\Directory.Build.props = test\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test", "test\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test\Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test.csproj", "{54403C31-9429-46E3-8D48-FC0C50E29A92}"
 EndProject

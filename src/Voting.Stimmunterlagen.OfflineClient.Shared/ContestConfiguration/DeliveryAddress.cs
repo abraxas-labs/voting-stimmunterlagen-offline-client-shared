@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using Newtonsoft.Json;
 
 namespace Voting.Stimmunterlagen.OfflineClient.Shared.ContestConfiguration;
 

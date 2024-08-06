@@ -1,4 +1,7 @@
-﻿using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Decryption;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Encryption;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Storage;

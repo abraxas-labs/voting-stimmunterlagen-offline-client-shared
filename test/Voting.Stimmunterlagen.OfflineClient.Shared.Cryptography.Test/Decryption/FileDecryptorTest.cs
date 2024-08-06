@@ -1,14 +1,17 @@
-﻿using System;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Certificates;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Decryption;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Exceptions;
-using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks.Storage;
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test.Mocks;
 using Xunit;
 
 namespace Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test.Decryption;
@@ -24,14 +27,14 @@ public class FileDecryptorTest : BaseTest
         var plaintextBytes = await ReadDummyText();
         var cryptoFileBytes = await ReadDummyEncryptedR1Text();
 
-        var decryptedCryptoFileBytes = RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver1PrivateCertificate);
+        var decryptedCryptoFileBytes = RunDecrypt(cryptoFileBytes, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
         plaintextBytes.SequenceEqual(decryptedCryptoFileBytes).Should().BeTrue();
     }
 
     [Fact]
     public void ShouldThrowWithSenderCertificateNull()
     {
-        var act = () => RunDecrypt(_mockBytes, null!, WindowsCertificateStoreMock.Receiver1PrivateCertificate);
+        var act = () => RunDecrypt(_mockBytes, null!, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
 
         act.Should()
             .Throw<ArgumentNullException>()
@@ -41,7 +44,7 @@ public class FileDecryptorTest : BaseTest
     [Fact]
     public void ShouldThrowWithReceiverCertificateNull()
     {
-        var act = () => RunDecrypt(_mockBytes, WindowsCertificateStoreMock.SenderPublicCertificate, null!);
+        var act = () => RunDecrypt(_mockBytes, BouncyCastleMockCertificates.SenderPublicCertificate, null!);
 
         act.Should()
             .Throw<ArgumentNullException>()
@@ -52,87 +55,74 @@ public class FileDecryptorTest : BaseTest
     public async Task ShouldThrowWithMissingReceiverPrivateKey()
     {
         var cryptoFileBytes = await ReadDummyEncryptedR1Text();
-        var act = () => RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver1PublicCertificate);
+        var act = () => RunDecrypt(cryptoFileBytes, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PublicCertificate);
 
         act.Should()
             .Throw<PrivateKeyNotProvidedException>()
-            .WithMessage("Private key on certificate A86F3051CEFA0535AD68267229D78779861133DD was not provided");
+            .WithMessage("Private key on certificate 0CF20B24F8D9791354FD155347CAC7EDEB98C475 was not provided");
     }
 
     [Fact]
     public async Task ShouldThrowIfWrongReceiverCertificate()
     {
         var cryptoFileBytes = await ReadDummyEncryptedR1Text();
-        var act = () => RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver2PrivateCertificate);
+        var act = () => RunDecrypt(cryptoFileBytes, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver2PrivateCertificate);
 
         act.Should()
             .Throw<ReceiverNotFoundException>()
-            .WithMessage("No matching receiver found for receiver certificate E800A2A563CC75C294508C831A61503DC9655E0B");
-    }
-
-    [Fact]
-    public async Task ShouldThrowIfHeaderEndIsMissing()
-    {
-        var cryptoFileBytes = await ReadInvalidDummyEncryptedR1WrongHeaderEndText();
-        var act = () => RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver2PrivateCertificate);
-
-        act.Should()
-            .Throw<CryptoFileException>()
-            .WithMessage("Did not found the delimiter between the text and binary bytes");
-    }
-
-    [Fact]
-    public async Task ShouldThrowIfHeaderStartIsMissing()
-    {
-        var cryptoFileBytes = await ReadInvalidDummyEncryptedR1WrongHeaderStartText();
-        var act = () => RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver2PrivateCertificate);
-
-        act.Should()
-            .Throw<CryptoFileException>()
-            .WithMessage("Expected header start but found '-*- HS'");
+            .WithMessage("No matching receiver found for receiver certificate 0AD9E6FE9EBFB380BB72085E1F6851ABDD398EEC");
     }
 
     [Fact]
     public async Task ShouldThrowIfPayloadManipulated()
     {
         var cryptoFileBytes = await ReadInvalidDummyEncryptedR1ManipulatedPayloadText();
-        var act = () => RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver2PrivateCertificate);
+        var act = () => RunDecrypt(cryptoFileBytes, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
 
         act.Should()
             .Throw<CryptographicException>()
-            .WithMessage("Invalid signature for sender certificate D9375911620C41FD38B56F3309342D3B4BFC87A7");
+            .WithMessage("Invalid signature for sender certificate 112F31E004C13E7F7B4A08C8F58DC1F3F21E651B");
     }
 
     [Fact]
-    public async Task ShouldThrowIfNoSenderInHeader()
+    public async Task ShouldThrowIfSignatureManipulated()
     {
-        var cryptoFileBytes = await ReadInvalidDummyEncryptedR1NoSenderText();
-        var act = () => RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver2PrivateCertificate);
+        var cryptoFileBytes = await ReadInvalidDummyEncryptedR1ManipulatedSignatureText();
+        var act = () => RunDecrypt(cryptoFileBytes, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
 
         act.Should()
-            .Throw<CryptoFileException>()
-            .WithMessage("Expected sender line but found '->*");
-    }
-
-    [Fact]
-    public async Task ShouldThrowIfNoReceiversInHeader()
-    {
-        var cryptoFileBytes = await ReadInvalidDummyEncryptedR1NoReceiversText();
-        var act = () => RunDecrypt(cryptoFileBytes, WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver2PrivateCertificate);
-
-        act.Should()
-            .Throw<CryptoFileException>()
-            .WithMessage("Expected receivers but found 0");
+            .Throw<CryptographicException>()
+            .WithMessage("Invalid signature for sender certificate 112F31E004C13E7F7B4A08C8F58DC1F3F21E651B");
     }
 
     [Fact]
     public void ShouldThrowWithEmptyCiphertext()
     {
-        var act = () => RunDecrypt(Array.Empty<byte>(), WindowsCertificateStoreMock.SenderPublicCertificate, WindowsCertificateStoreMock.Receiver2PrivateCertificate);
+        var act = () => RunDecrypt(Array.Empty<byte>(), BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
         act.Should().Throw<EmptyByteArrayException>().WithMessage("*cryptoFileBytes*");
     }
 
-    private byte[] RunDecrypt(byte[] cryptoFileBytes, X509Certificate2 senderCert, X509Certificate2 receiverCert)
+    [Fact]
+    public void ShouldThrowIfInvalidFileContentNewlineStart()
+    {
+        var act = () => RunDecrypt(new byte[] { 0x0A, 0x44, 0x44, 0x44 }, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
+
+        act.Should()
+            .Throw<CryptographicException>()
+            .WithMessage("Invalid file");
+    }
+
+    [Fact]
+    public void ShouldThrowIfInvalidFileContentNewlineEnd()
+    {
+        var act = () => RunDecrypt(new byte[] { 0x44, 0x44, 0x44, 0x0A }, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
+
+        act.Should()
+            .Throw<CryptographicException>()
+            .WithMessage("Invalid file");
+    }
+
+    private byte[] RunDecrypt(byte[] cryptoFileBytes, ICertificate senderCert, ICertificate receiverCert)
     {
         return _decryptor.Decrypt(cryptoFileBytes, senderCert, receiverCert).Decrypted;
     }

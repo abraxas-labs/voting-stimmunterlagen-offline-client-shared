@@ -1,19 +1,21 @@
-﻿using System;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Algorithms;
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Certificates;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Models;
 
 namespace Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Encryption;
 
 internal static class CryptoFileBuilder
 {
-    public static CryptoFile BuildFile(byte[] nonce, byte[] ciphertext, byte[] tag, List<(X509Certificate2 ReceiverCertificate, byte[] WrappedKey)> wrappedKeys, X509Certificate2 senderCertificate)
+    public static CryptoFile BuildFile(byte[] nonce, byte[] ciphertext, byte[] tag, List<(ICertificate ReceiverCertificate, byte[] WrappedKey)> wrappedKeys, ICertificate senderCertificate)
     {
         var content = BuildContent(nonce, ciphertext, tag, senderCertificate, wrappedKeys);
-        var signature = SignAlgorithm.Sign(senderCertificate, FileContentConverter.ToByteArray(content));
+        var signature = senderCertificate.Sign(FileContentConverter.ToByteArray(content));
 
         return new()
         {
@@ -22,7 +24,7 @@ internal static class CryptoFileBuilder
         };
     }
 
-    private static CryptoFileContent BuildContent(byte[] nonce, byte[] ciphertext, byte[] tag, X509Certificate2 senderCertificate, List<(X509Certificate2 ReceiverCertificate, byte[] WrappedKey)> wrappedKeys)
+    private static CryptoFileContent BuildContent(byte[] nonce, byte[] ciphertext, byte[] tag, ICertificate senderCertificate, List<(ICertificate ReceiverCertificate, byte[] WrappedKey)> wrappedKeys)
     {
         return new()
         {
@@ -41,7 +43,7 @@ internal static class CryptoFileBuilder
         };
     }
 
-    private static CryptoFileSender BuildSender(X509Certificate2 senderCertificate)
+    private static CryptoFileSender BuildSender(ICertificate senderCertificate)
     {
         var senderSalt = BuildSalt(CryptographyConstants.SenderSaltSize);
         using var hmac = new HMACSHA256(senderSalt);
@@ -54,7 +56,7 @@ internal static class CryptoFileBuilder
         };
     }
 
-    private static CryptoFileReceiver BuildReceiver(X509Certificate2 receiverCertificate, byte[] wrappedKey)
+    private static CryptoFileReceiver BuildReceiver(ICertificate receiverCertificate, byte[] wrappedKey)
     {
         var receiverSalt = BuildSalt(CryptographyConstants.ReceiverSaltSize);
         using var hmac = new HMACSHA256(receiverSalt);

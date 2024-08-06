@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Exceptions;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System.Collections.Generic;
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Certificates;
 
 namespace Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Algorithms;
 
@@ -10,36 +11,18 @@ namespace Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Algorithms;
 /// </summary>
 internal static class KeyWrapperCryptoAlgorithm
 {
-    private static readonly RSAEncryptionPadding _encryptionPadding = RSAEncryptionPadding.OaepSHA512;
-
-    public static List<(X509Certificate2 Certificate, byte[] WrappedKey)> WrapKeys(byte[] key, List<X509Certificate2> certificates)
+    public static List<(ICertificate Certificate, byte[] WrappedKey)> WrapKeys(byte[] key, List<ICertificate> certificates)
     {
         return certificates.ConvertAll(receiverCertificate => (receiverCertificate, WrapKey(key, receiverCertificate)));
     }
 
-    public static byte[] UnwrapKey(byte[] encryptedKey, X509Certificate2 certificate)
+    public static byte[] UnwrapKey(byte[] encryptedKey, ICertificate certificate)
     {
-        if (encryptedKey.Length == 0)
-        {
-            throw new EmptyByteArrayException(nameof(encryptedKey));
-        }
-
-        var privateKey = certificate.GetRSAPrivateKey()
-            ?? throw new PrivateKeyNotProvidedException(certificate);
-
-        return privateKey.Decrypt(encryptedKey, _encryptionPadding);
+        return certificate.Decrypt(encryptedKey);
     }
 
-    private static byte[] WrapKey(byte[] key, X509Certificate2 certificate)
+    private static byte[] WrapKey(byte[] key, ICertificate certificate)
     {
-        if (key.Length == 0)
-        {
-            throw new EmptyByteArrayException(nameof(key));
-        }
-
-        var publicKey = certificate.GetRSAPublicKey()
-            ?? throw new PublicKeyNotProvidedException(certificate);
-
-        return publicKey.Encrypt(key, _encryptionPadding);
+        return certificate.Encrypt(key);
     }
 }

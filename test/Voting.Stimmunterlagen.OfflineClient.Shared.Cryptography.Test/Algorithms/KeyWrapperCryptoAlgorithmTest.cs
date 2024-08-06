@@ -1,12 +1,16 @@
-﻿using System;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using FluentAssertions;
+using Org.BouncyCastle.Crypto;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Algorithms;
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Certificates;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Exceptions;
-using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks.Storage;
+using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test.Mocks;
 using Xunit;
 
 namespace Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Test.Algorithms;
@@ -22,13 +26,13 @@ public class KeyWrapperCryptoAlgorithmTest
             fileKey,
             new()
             {
-                WindowsCertificateStoreMock.Receiver1PublicCertificate,
-                WindowsCertificateStoreMock.Receiver2PublicCertificate,
+                BouncyCastleMockCertificates.Receiver1PublicCertificate,
+                BouncyCastleMockCertificates.Receiver2PublicCertificate,
             },
             new()
             {
-                WindowsCertificateStoreMock.Receiver1PrivateCertificate,
-                WindowsCertificateStoreMock.Receiver2PrivateCertificate,
+                BouncyCastleMockCertificates.Receiver1PrivateCertificate,
+                BouncyCastleMockCertificates.Receiver2PrivateCertificate,
             });
 
         foreach (var unwrappedFileKey in unwrappedFileKeys)
@@ -46,16 +50,16 @@ public class KeyWrapperCryptoAlgorithmTest
             fileKey,
             new()
             {
-                WindowsCertificateStoreMock.Receiver1PublicCertificate,
-                WindowsCertificateStoreMock.Receiver2PublicCertificate,
+                BouncyCastleMockCertificates.Receiver1PublicCertificate,
+                BouncyCastleMockCertificates.Receiver2PublicCertificate,
             },
             new()
             {
-                WindowsCertificateStoreMock.Receiver2PrivateCertificate,
-                WindowsCertificateStoreMock.Receiver1PrivateCertificate,
+                BouncyCastleMockCertificates.Receiver2PrivateCertificate,
+                BouncyCastleMockCertificates.Receiver1PrivateCertificate,
             });
 
-        act.Should().Throw<CryptographicException>();
+        act.Should().Throw<InvalidCipherTextException>();
     }
 
     [Fact]
@@ -67,13 +71,13 @@ public class KeyWrapperCryptoAlgorithmTest
             fileKey,
             new()
             {
-                WindowsCertificateStoreMock.Receiver1PublicCertificate,
-                WindowsCertificateStoreMock.Receiver2PublicCertificate,
+                BouncyCastleMockCertificates.Receiver1PublicCertificate,
+                BouncyCastleMockCertificates.Receiver2PublicCertificate,
             },
             new()
             {
-                WindowsCertificateStoreMock.Receiver1PublicCertificate,
-                WindowsCertificateStoreMock.Receiver2PublicCertificate,
+                BouncyCastleMockCertificates.Receiver1PublicCertificate,
+                BouncyCastleMockCertificates.Receiver2PublicCertificate,
             });
 
         act.Should().Throw<PrivateKeyNotProvidedException>();
@@ -84,20 +88,20 @@ public class KeyWrapperCryptoAlgorithmTest
     {
         var act = () => KeyWrapperCryptoAlgorithm.WrapKeys(Array.Empty<byte>(), new()
             {
-                WindowsCertificateStoreMock.Receiver1PublicCertificate,
-                WindowsCertificateStoreMock.Receiver2PublicCertificate,
+                BouncyCastleMockCertificates.Receiver1PublicCertificate,
+                BouncyCastleMockCertificates.Receiver2PublicCertificate,
             });
         act.Should().Throw<EmptyByteArrayException>()
-            .WithMessage("*key*");
+            .WithMessage("*plaintext*");
     }
 
     [Fact]
     public void ShouldThrowOnUnwrapWithEmptyEncryptedFileKey()
     {
         var act = () => KeyWrapperCryptoAlgorithm
-            .UnwrapKey(Array.Empty<byte>(), WindowsCertificateStoreMock.Receiver1PrivateCertificate);
+            .UnwrapKey(Array.Empty<byte>(), BouncyCastleMockCertificates.Receiver1PrivateCertificate);
         act.Should().Throw<EmptyByteArrayException>()
-            .WithMessage("*encryptedKey*");
+            .WithMessage("*ciphertext*");
     }
 
     private byte[] BuildFileKey()
@@ -107,7 +111,7 @@ public class KeyWrapperCryptoAlgorithmTest
         return fileKey;
     }
 
-    private List<byte[]> Roundtrip(byte[] fileKey, List<X509Certificate2> wrapCerts, List<X509Certificate2> unwrapCerts)
+    private List<byte[]> Roundtrip(byte[] fileKey, List<ICertificate> wrapCerts, List<ICertificate> unwrapCerts)
     {
         var result = new List<byte[]>();
 

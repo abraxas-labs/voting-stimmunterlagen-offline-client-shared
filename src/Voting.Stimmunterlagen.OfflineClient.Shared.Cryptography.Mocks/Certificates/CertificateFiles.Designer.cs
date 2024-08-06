@@ -64,6 +64,26 @@ namespace Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Mocks.Certifi
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] keystore_private {
+            get {
+                object obj = ResourceManager.GetObject("keystore_private", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] keystore_public {
+            get {
+                object obj = ResourceManager.GetObject("keystore_public", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] receiver1_private {
             get {
                 object obj = ResourceManager.GetObject("receiver1_private", resourceCulture);

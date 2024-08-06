@@ -1,4 +1,7 @@
-﻿using System;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +16,11 @@ internal static class CryptoFileBuilder
 
     public static CryptoFile BuildFile(byte[] fileContentBytes)
     {
+        if (fileContentBytes.Length == 0)
+        {
+            throw new EmptyByteArrayException(nameof(fileContentBytes));
+        }
+
         var (textBytes, binaryBytes) = SplitTextAndBinaryBytes(fileContentBytes);
 
         using var msStream = new MemoryStream(textBytes);

@@ -1,6 +1,6 @@
 <Project>
     <ItemGroup>
-        <PackageReference Include="Roslynator.Analyzers" Version="4.2.0" PrivateAssets="All">
+        <PackageReference Include="Roslynator.Analyzers" Version="4.11.0" PrivateAssets="All">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>

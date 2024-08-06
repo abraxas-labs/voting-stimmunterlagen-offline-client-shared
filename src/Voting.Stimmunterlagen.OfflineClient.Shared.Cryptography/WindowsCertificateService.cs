@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿// (c) Copyright by Abraxas Informatik AG
+// For license information see LICENSE file
+
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Voting.Stimmunterlagen.OfflineClient.Shared.Cryptography.Storage;
 
