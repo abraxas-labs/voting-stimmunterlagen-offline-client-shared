@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.1.0`)
+# ✨ Changelog (`v2.1.3`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.1.0
-Previous version ---- v1.4.0
+This version -------- v2.1.3
+Previous version ---- v2.1.0
 Initial version ----- v1.3.4
-Total commits ------- 5
+Total commits ------- 3
 ```
+
+## [v2.1.3] - 2024-08-13
+
+### 🔄 Changed
+
+- enable continuous integration build property for dotnet CLI
+- preserve source revision information version to enable source-link feature
+
+## [v2.1.2] - 2024-08-12
+
+### 🔄 Changed
+
+- use ci build property to enable normalized artifacts for official builds.
+
+## [v2.1.1] - 2024-08-12
+
+### 🔄 Changed
+
+- prevent source revision from being included in release builds to preserve deterministic builds.
 
 ## [v2.1.0] - 2024-07-04
 
