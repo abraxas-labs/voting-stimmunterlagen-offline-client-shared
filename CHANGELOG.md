@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.1.3`)
+# ✨ Changelog (`v2.2.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.1.3
-Previous version ---- v2.1.0
+This version -------- v2.2.0
+Previous version ---- v2.1.3
 Initial version ----- v1.3.4
 Total commits ------- 3
 ```
+
+## [v2.2.0] - 2024-10-18
+
+### 🆕 Added
+
+- add stistat flag to municipality
+
+## [v2.1.4] - 2024-08-28
+
+### :arrows_counterclockwise: Changed
+
+- update bug bounty template reference
+- patch ci-cd template version, align with new defaults
 
 ## [v2.1.3] - 2024-08-13
 
