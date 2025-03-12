@@ -49,9 +49,6 @@ public class Municipality
     [JsonProperty("vcteVotingFingerprint")]
     public string? VcteVotingFingerprint { get; set; }
 
-    [JsonProperty("attachmentStations")]
-    public string AttachmentStations { get; set; } = string.Empty;
-
     [JsonProperty("stistat")]
     public bool Stistat { get; set; }
 }
