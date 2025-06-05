@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.2.1`)
+# ✨ Changelog (`v2.2.2`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.2.1
-Previous version ---- v2.2.0
+This version -------- v2.2.2
+Previous version ---- v2.2.1
 Initial version ----- v1.3.4
 Total commits ------- 1
 ```
+
+## [v2.2.2] - 2025-06-04
+
+### 🆕 Added
+
+- add attachment stations to municipality
 
 ## [v2.2.1] - 2025-03-03
 
