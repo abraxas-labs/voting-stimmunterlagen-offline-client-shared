@@ -22,6 +22,9 @@ public class DeliveryAddress
     [JsonProperty("addressField2")]
     public string? AddressField2 { get; set; }
 
+    [JsonProperty("addressAddition")]
+    public string? AddressAddition { get; set; }
+
     [JsonProperty("country")]
     public string Country { get; set; } = string.Empty;
 }

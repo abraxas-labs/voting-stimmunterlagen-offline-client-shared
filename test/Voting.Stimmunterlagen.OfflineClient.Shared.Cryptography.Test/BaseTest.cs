@@ -20,6 +20,8 @@ public abstract class BaseTest
 
     protected Task<byte[]> ReadInvalidDummyEncryptedR1ManipulatedSignatureText() => ReadTestFile("invalid-dummy-encrypted-r1-manipulated-signature.bin");
 
+    protected Task<byte[]> ReadInvalidDummyEncryptedR1InvalidByteSequenceInSignatureText() => ReadTestFile("invalid-dummy-encrypted-r1-invalid-byte-sequence-in-signature.bin");
+
     protected Task<byte[]> ReadInvalidDummyEncryptedR1NoVersionText() => ReadTestFile("invalid-dummy-encrypted-r1-no-version.bin");
 
     protected Task<byte[]> ReadInvalidDummyEncryptedR1InvalidVersionText() => ReadTestFile("invalid-dummy-encrypted-r1-invalid-version.bin");

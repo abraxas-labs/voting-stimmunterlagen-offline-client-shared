@@ -112,11 +112,20 @@ public class FileDecryptor
         Buffer.BlockCopy(fileContent, 0, signature, 0, pos);
         Buffer.BlockCopy(fileContent, pos + 1, payload, 0, payload.Length);
 
-        var sig = Encoding.UTF8.GetString(signature);
+        string signatureBase64;
+        try
+        {
+            var utf8Strict = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+            signatureBase64 = utf8Strict.GetString(signature);
+        }
+        catch (DecoderFallbackException ex)
+        {
+            throw new CryptographicException("Unknown byte sequence in signature", ex);
+        }
 
         if (!senderCertificate.Verify(
             payload,
-            Convert.FromBase64String(sig)))
+            Convert.FromBase64String(signatureBase64)))
         {
             throw new CryptographicException($"Invalid signature for sender certificate {senderCertificate.Thumbprint}");
         }

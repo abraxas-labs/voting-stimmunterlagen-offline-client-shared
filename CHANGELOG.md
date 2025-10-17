@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.2.2`)
+# ✨ Changelog (`v2.2.4`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.2.2
-Previous version ---- v2.2.1
+This version -------- v2.2.4
+Previous version ---- v2.2.2
 Initial version ----- v1.3.4
-Total commits ------- 1
+Total commits ------- 2
 ```
+
+## [v2.2.4] - 2025-08-28
+
+### 🔄 Changed
+
+- handle invalid byte sequences when converting signature from byte to base64 string in file decryptor.
+
+## [v2.2.3] - 2025-07-11
+
+### 🆕 Added
+
+- add delivery address addition
 
 ## [v2.2.2] - 2025-06-04
 

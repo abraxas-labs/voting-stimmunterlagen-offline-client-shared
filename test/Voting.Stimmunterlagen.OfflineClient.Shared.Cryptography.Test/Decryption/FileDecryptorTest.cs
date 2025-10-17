@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -120,6 +121,19 @@ public class FileDecryptorTest : BaseTest
         act.Should()
             .Throw<CryptographicException>()
             .WithMessage("Invalid file");
+    }
+
+    [Fact]
+    public async Task ShouldThrowIfInvalidByteSequenceInSignature()
+    {
+        var cryptoFileBytes = await ReadInvalidDummyEncryptedR1InvalidByteSequenceInSignatureText();
+        var act = () => RunDecrypt(cryptoFileBytes, BouncyCastleMockCertificates.SenderPublicCertificate, BouncyCastleMockCertificates.Receiver1PrivateCertificate);
+
+        act.Should()
+            .Throw<CryptographicException>()
+            .WithMessage("Unknown byte sequence in signature")
+            .WithInnerException<DecoderFallbackException>()
+            .WithMessage("Unable to translate bytes [FF] at index 0 from specified code page to Unicode.");
     }
 
     private byte[] RunDecrypt(byte[] cryptoFileBytes, ICertificate senderCert, ICertificate receiverCert)
